@@ -9,9 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,7 +28,7 @@ import com.mathewhaug.boardgamehelper.ui.theme.StClairTheme
 
 //Stateful-owns the state passes values down and receives events back up
 @Composable
-fun LoginScreen() {
+fun LoginScreen(onSignedIn: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -40,28 +37,25 @@ fun LoginScreen() {
         derivedStateOf { "@" in email && password.length >= 8 }
     }
 
-    val snackbarHostState = remember { SnackbarHostState() }
-
-    // The counter is the event identity a new value restarts the effect, a recomposition does not
+    // The counter is still the event identity - a new value restarts the effect, so a
+    // recomposition triggered by something unrelated never re-fires the sign in
     var signInEvent by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(signInEvent) {
         if (signInEvent > 0) {
-            snackbarHostState.showSnackbar("Welcome")
+            // Navigating here instead of showing a snackbar is a deliberate choice - showSnackbar
+            // suspends until the snackbar is dismissed, so calling it and navigating after it
+            // would leave the user staring at the login screen for several seconds first
+            onSignedIn()
         }
     }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { innerPadding ->
-        // LoginForm takes no modifier, so the caller applies the scaffold insets around it
-        Box(modifier = Modifier.padding(innerPadding)) {
-            LoginForm(
-                email = email, onEmailChange = { email = it },
-                password = password, onPasswordChange = { password = it },
-                onSignIn = { signInEvent++ }, signInEnabled = canSignIn
-            )
-        }
+    Box(modifier = Modifier.fillMaxSize()) {
+        LoginForm(
+            email = email, onEmailChange = { email = it },
+            password = password, onPasswordChange = { password = it },
+            onSignIn = { signInEvent++ }, signInEnabled = canSignIn
+        )
     }
 }
 

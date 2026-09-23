@@ -11,8 +11,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            // the activity just wires up the theme and the map, it holds no logic of its own
             StClairTheme {
-                LoginScreen()
+                App()
             }
         }
     }
