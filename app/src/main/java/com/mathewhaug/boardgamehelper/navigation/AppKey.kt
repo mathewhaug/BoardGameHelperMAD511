@@ -14,4 +14,5 @@ sealed interface AppKey : NavKey
 @Serializable data object Login : AppKey
 @Serializable data object Home : AppKey
 @Serializable data class GameDetail(val id: Int) : AppKey
+@Serializable data object Shortlist : AppKey
 @Serializable data object ConfirmSignOut : AppKey

@@ -46,10 +46,18 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    // viewmodel-compose gives us viewModel(), runtime-compose gives us collectAsStateWithLifecycle,
+    // and viewmodel-navigation3 is the bridge that scopes a ViewModel to a Nav3 back stack entry
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.kotlinx.serialization.core)
     testImplementation(libs.junit)
+    // runTest and StandardTestDispatcher, so a ViewModel that launches coroutines can be driven
+    // from a plain JVM test with no emulator involved
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)

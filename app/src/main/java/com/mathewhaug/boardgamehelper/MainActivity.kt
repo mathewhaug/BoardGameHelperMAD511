@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.mathewhaug.boardgamehelper.navigation.App
 import com.mathewhaug.boardgamehelper.ui.theme.StClairTheme
 
 class MainActivity : ComponentActivity() {

@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- android:name is what makes the system build our BoardGameApp instead of the stock
+         Application, which is the only reason the dependency container ever gets created -->
     <application
+        android:name=".di.BoardGameApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
