@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
 // an in memory GameRepository: the whole store is two StateFlows and nothing survives the process.
@@ -21,6 +22,11 @@ class FakeGameRepository : GameRepository {
     // caller can ever emit into the shortlist from the outside
     private val _shortlist = MutableStateFlow<List<Game>>(emptyList())
     override val shortlist: StateFlow<List<Game>> = _shortlist.asStateFlow()
+
+    // the in memory stand in for the LIKE query in ShortlistDao: same prefix rule, same case
+    // insensitivity, so a preview or a test sees the same matches the real database would give
+    override fun search(term: String): Flow<List<Game>> =
+        _shortlist.map { games -> games.filter { it.name.startsWith(term, ignoreCase = true) } }
 
     // update { } reads the current list and writes the new one as one atomic step, so two quick
     // taps cannot race each other into adding the same game twice

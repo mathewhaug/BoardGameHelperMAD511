@@ -23,10 +23,15 @@ fun ShortlistRoute(
     onBack: () -> Unit,
     viewModel: ShortlistViewModel = viewModel(factory = ShortlistViewModelFactory)
 ) {
-    val games by viewModel.shortlist.collectAsStateWithLifecycle()
+    // results replaces shortlist as the list on screen. with an empty query it is the whole
+    // shortlist anyway, so the screen never has to know which of the two it is showing
+    val query by viewModel.query.collectAsStateWithLifecycle()
+    val results by viewModel.results.collectAsStateWithLifecycle()
 
     ShortlistScreen(
-        games = games,
+        query = query,
+        onQueryChange = viewModel::onQueryChange,
+        games = results,
         onRemove = viewModel::remove,
         onBack = onBack,
     )

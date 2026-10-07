@@ -1,0 +1,72 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "67a8a6a3b6d222fa238f5020f0ede402",
+    "entities": [
+      {
+        "tableName": "shortlist",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `min_players` INTEGER NOT NULL, `max_players` INTEGER NOT NULL, `play_time_minutes` INTEGER NOT NULL, `added_at` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "minPlayers",
+            "columnName": "min_players",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maxPlayers",
+            "columnName": "max_players",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "playTimeMinutes",
+            "columnName": "play_time_minutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "addedAt",
+            "columnName": "added_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_shortlist_name",
+            "unique": false,
+            "columnNames": [
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_shortlist_name` ON `${TABLE_NAME}` (`name`)"
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '67a8a6a3b6d222fa238f5020f0ede402')"
+    ]
+  }
+}

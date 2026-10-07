@@ -13,6 +13,9 @@ import kotlinx.coroutines.flow.Flow
 interface GameRepository {
     val games: Flow<List<Game>>
     val shortlist: Flow<List<Game>>
+    // searches the shortlist by name prefix. a function rather than a val because it takes the
+    // term, but still a Flow, so the results keep up with the table while the user is looking
+    fun search(term: String): Flow<List<Game>>
     suspend fun addToShortlist(game: Game)
     suspend fun removeFromShortlist(game: Game)
 }
