@@ -5,6 +5,7 @@ import com.mathewhaug.boardgamehelper.data.local.ShortlistedGame
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 // the same interface FakeGameRepository implements, now backed by a real table. this class owns
 // the mapping between the database's shape and the app's shape, so the DAO never hears about Game
@@ -12,7 +13,9 @@ import kotlinx.coroutines.flow.map
 //
 // the ViewModels do not change at all for this swap, because they depend on GameRepository and not
 // on a concrete class. that is the whole point of the Week 4 interface paying off
-class RoomGameRepository(private val dao: ShortlistDao) : GameRepository {
+//
+// @Inject on the constructor is all hilt needs to build this, it already knows how to make a ShortlistDao
+class RoomGameRepository @Inject constructor(private val dao: ShortlistDao) : GameRepository {
     override val games: Flow<List<Game>> = flowOf(SampleGames)  // catalogue stays hard coded, network later
     override val shortlist: Flow<List<Game>> =
         dao.observeAll().map { rows -> rows.map { it.toGame() } }

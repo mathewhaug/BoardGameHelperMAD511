@@ -6,7 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.mathewhaug.boardgamehelper.navigation.App
 import com.mathewhaug.boardgamehelper.ui.theme.StClairTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+// hiltViewModel() below this activity needs it to be a hilt entry point to reach the graph
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

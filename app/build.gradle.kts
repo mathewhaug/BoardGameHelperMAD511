@@ -5,6 +5,8 @@ plugins {
     // ksp runs Room's annotation processor, and the room3 plugin is what wires schemaDirectory into it
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidx.room3)
+    // hilt generates the component code at build time, through the same ksp that Room already uses
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -69,6 +71,11 @@ dependencies {
     implementation(libs.androidx.room3.runtime)
     implementation(libs.androidx.sqlite.bundled)
     ksp(libs.androidx.room3.compiler)
+    // hilt-android is the runtime, the compiler writes the graph, and viewmodel-compose gives us
+    // hiltViewModel() without pulling in Navigation 2 the way hilt-navigation-compose would
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.viewmodel.compose)
     testImplementation(libs.junit)
     // runTest and StandardTestDispatcher, so a ViewModel that launches coroutines can be driven
     // from a plain JVM test with no emulator involved

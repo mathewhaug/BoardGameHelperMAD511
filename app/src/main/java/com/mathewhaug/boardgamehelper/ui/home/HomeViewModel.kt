@@ -4,16 +4,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mathewhaug.boardgamehelper.data.Game
 import com.mathewhaug.boardgamehelper.data.GameRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 // the repository arrives through the constructor typed as the interface, never as
 // FakeGameRepository. this class has no idea which implementation it was handed, which is exactly
-// what lets the unit test pass it a fake and the app pass it whatever the container builds
-class HomeViewModel(private val repository: GameRepository) : ViewModel() {
+// what lets the unit test pass it a fake and the app pass it whatever hilt has bound
+@HiltViewModel
+class HomeViewModel @Inject constructor(private val repository: GameRepository) : ViewModel() {
 
     // no backing property and no _uiState here, because nothing in this class ever writes to
     // uiState directly. it is derived from two repository Flows, so whenever either one emits the

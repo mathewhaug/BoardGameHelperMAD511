@@ -3,6 +3,10 @@ package com.mathewhaug.boardgamehelper.ui.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mathewhaug.boardgamehelper.data.GameRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -13,8 +17,12 @@ import kotlinx.coroutines.launch
 // navigation key carried it typed: no SavedStateHandle string lookup, no parsing, no default to
 // invent. the lookup that used to sit in App.kt moved in here, next to the repository it depends
 // on, which is where it belonged all along
-class GameDetailViewModel(
-    private val gameId: Int,
+//
+// gameId only exists at runtime, so it comes through the assisted factory instead of the graph,
+// while the repository still comes from hilt like everywhere else
+@HiltViewModel(assistedFactory = GameDetailViewModel.Factory::class)
+class GameDetailViewModel @AssistedInject constructor(
+    @Assisted private val gameId: Int,
     private val repository: GameRepository
 ) : ViewModel() {
 
@@ -41,5 +49,12 @@ class GameDetailViewModel(
         } else {
             repository.addToShortlist(current.game)
         }
+    }
+
+    // hilt generates the implementation. the Route calls create(gameId) from hiltViewModel's
+    // creationCallback, and only the first time for this entry, after that the stored instance wins
+    @AssistedFactory
+    interface Factory {
+        fun create(gameId: Int): GameDetailViewModel
     }
 }

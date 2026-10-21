@@ -2,26 +2,19 @@ package com.mathewhaug.boardgamehelper.ui.detail
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.mathewhaug.boardgamehelper.di.BoardGameApp
 
-// this factory cannot be a top level val like HomeViewModelFactory, because it has to capture the
-// gameId that only this Route knows, so it is built inline. the app is pulled from LocalContext
-// here instead of APPLICATION_KEY just to show that both roads lead to the same container
+// gameId is the one thing hilt cannot know, so creationCallback hands it to the assisted factory,
+// and the callback only runs when this entry has no GameDetailViewModel yet, so a rotation gets the
+// stored instance back and create() is not called again
 //
 // the ViewModel is scoped to this back stack entry, not the Activity, so GameDetail(13) and
 // GameDetail(42) sitting on the stack together each get their own instance with their own id
 @Composable
 fun GameDetailRoute(gameId: Int, onBack: () -> Unit) {
-    val app = LocalContext.current.applicationContext as BoardGameApp
-    val viewModel: GameDetailViewModel = viewModel(
-        factory = viewModelFactory {
-            initializer { GameDetailViewModel(gameId, app.container.repository) }
-        }
+    val viewModel = hiltViewModel<GameDetailViewModel, GameDetailViewModel.Factory>(
+        creationCallback = { it.create(gameId) }
     )
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
