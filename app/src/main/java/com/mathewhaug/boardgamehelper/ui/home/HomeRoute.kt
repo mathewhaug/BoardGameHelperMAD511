@@ -29,5 +29,7 @@ fun HomeRoute(
         onToggleShortlist = viewModel::toggleShortlist,
         onOpenShortlist = onOpenShortlist,
         onSignOut = onSignOut,
+        onRefresh = viewModel::refresh,
+        onNoticeShown = viewModel::onNoticeShown,
     )
 }
