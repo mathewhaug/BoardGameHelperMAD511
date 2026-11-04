@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room3.Room
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.mathewhaug.boardgamehelper.data.local.AppDatabase
+import com.mathewhaug.boardgamehelper.data.local.CatalogueDao
 import com.mathewhaug.boardgamehelper.data.local.ShortlistDao
 import dagger.Module
 import dagger.Provides
@@ -36,4 +37,7 @@ object DatabaseModule {
     // not scoped, the DAO is cheap and the database it comes from is already the single instance
     @Provides
     fun provideShortlistDao(db: AppDatabase): ShortlistDao = db.shortlistDao()
+
+    @Provides
+    fun provideCatalogueDao(db: AppDatabase): CatalogueDao = db.catalogueDao()
 }
