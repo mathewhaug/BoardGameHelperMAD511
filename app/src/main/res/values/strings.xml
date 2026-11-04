@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">BoardGameHelper</string>
+
+    <!-- what the user reads when loading games fails, one per AppError -->
+    <string name="error_no_network">No internet connection. Check your connection and try again.</string>
+    <string name="error_unauthorized">BoardGameGeek did not accept this app\'s access token.</string>
+    <string name="error_rate_limited">BoardGameGeek is busy right now. Try again in a minute.</string>
+    <string name="error_not_found">BoardGameGeek could not find those games.</string>
+    <string name="error_server">BoardGameGeek had a problem. Try again later.</string>
+    <string name="error_bad_data">BoardGameGeek sent something the app could not read.</string>
 </resources>
