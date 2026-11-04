@@ -108,6 +108,10 @@ dependencies {
     // runTest and StandardTestDispatcher, so a ViewModel that launches coroutines can be driven
     // from a plain JVM test with no emulator involved
     testImplementation(libs.kotlinx.coroutines.test)
+    // on the JVM the android.jar every unit test sees is only stubs, and XmlPullParserFactory
+    // throws "not mocked". kxml2 is the parser Android itself ships, so the tests run the same
+    // pull parser API on a real implementation
+    testImplementation(libs.kxml2)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
