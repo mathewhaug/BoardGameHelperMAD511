@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -8,6 +10,15 @@ plugins {
     // hilt generates the component code at build time, through the same ksp that Room already uses
     alias(libs.plugins.hilt)
 }
+
+// local.properties is gitignored, so each teammate keeps their own BGG token in it and it never
+// lands in a commit. a missing file or a missing key just means an empty token, which the app
+// treats as "use the sample data", so a fresh clone still builds and runs
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
+val bggToken: String = localProperties.getProperty("BGG_TOKEN", "")
 
 android {
     namespace = "com.mathewhaug.boardgamehelper"
@@ -23,6 +34,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BGG_TOKEN", "\"$bggToken\"")
     }
 
     buildTypes {
@@ -38,6 +51,8 @@ android {
     }
     buildFeatures {
         compose = true
+        // off by default since AGP 8, and BGG_TOKEN above needs it to exist
+        buildConfig = true
     }
 }
 
@@ -65,6 +80,19 @@ dependencies {
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.kotlinx.serialization.core)
+    // retrofit turns an interface into HTTP calls, and okhttp underneath it does the actual sending.
+    // the BOM pins every okhttp artifact to one version so logging-interceptor needs no version of
+    // its own and cannot drift away from the okhttp that retrofit brought in
+    implementation(libs.retrofit)
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp.logging.interceptor)
+    // BGG answers in XML, so these two are not used by it. they are the usual setup for a JSON API
+    // and sit here so the wiring is there to look at
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit.converter.kotlinx.serialization)
+    // coil loads the thumbnails, and coil-network-okhttp is how it fetches them over http at all
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
     // the runtime is what the app calls, the compiler only runs at build time to generate the DAO
     // and database classes, and the bundled driver ships its own SQLite so every device runs the
     // same version instead of whatever the phone happens to have

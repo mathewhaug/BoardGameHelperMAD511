@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- a normal permission, granted at install with no prompt. without it every request fails
+         with a SecurityException before it ever leaves the phone -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- android:name is what makes the system build our BoardGameApp instead of the stock
          Application, which is the only reason the hilt graph ever gets created -->
     <application
