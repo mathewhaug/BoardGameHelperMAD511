@@ -5,7 +5,10 @@ data class Game(
     val name: String,
     val minPlayers: Int,
     val maxPlayers: Int,
-    val playTimeMinutes: Int
+    val playTimeMinutes: Int,
+    // defaults to null so every Game built before thumbnails existed (SampleGames, the fake, the
+    // tests, the shortlist table) still compiles and simply has no picture
+    val thumbnailUrl: String? = null,
 )
 
 // hard coded on purpose - this is what a repository will hand back once Room and the

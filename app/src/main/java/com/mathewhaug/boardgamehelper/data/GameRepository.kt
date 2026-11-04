@@ -18,4 +18,12 @@ interface GameRepository {
     fun search(term: String): Flow<List<Game>>
     suspend fun addToShortlist(game: Game)
     suspend fun removeFromShortlist(game: Game)
+
+    // fetches the catalogue from BGG into the cache. games then updates by itself, so this only
+    // reports how it went, and a failure is a value to show rather than an exception to catch
+    suspend fun refresh(): Result<Unit>
+
+    // when the oldest cached game was fetched, in epoch millis, or null if nothing is cached yet.
+    // it is what lets a screen decide whether a refresh is worth doing at all
+    suspend fun oldestFetch(): Long?
 }

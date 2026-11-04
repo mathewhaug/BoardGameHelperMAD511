@@ -37,4 +37,9 @@ class FakeGameRepository : GameRepository {
     override suspend fun removeFromShortlist(game: Game) {
         _shortlist.update { current -> current - game }
     }
+
+    // nothing to fetch, the games are already here
+    override suspend fun refresh(): Result<Unit> = Result.success(Unit)
+
+    override suspend fun oldestFetch(): Long? = null
 }
