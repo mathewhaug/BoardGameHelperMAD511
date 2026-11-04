@@ -112,6 +112,9 @@ dependencies {
     // throws "not mocked". kxml2 is the parser Android itself ships, so the tests run the same
     // pull parser API on a real implementation
     testImplementation(libs.kxml2)
+    // a real HTTP server on localhost, so a test can see the exact request our client sends. no
+    // version here, the okhttp BOM above pins it to the same 4.12.0 as the client it is testing
+    testImplementation(libs.okhttp.mockwebserver)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
