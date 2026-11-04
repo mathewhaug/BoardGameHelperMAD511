@@ -58,10 +58,11 @@ fun HomeScreen(
             // key gives each row a stable identity tied to the game, not its position in the
             // list, so remembered state (scroll position, a future expanded flag) follows the
             // item instead of the slot - the same call site identity idea from Week 2
-            items(uiState.games, key = { it.id }) { game ->
+            val success = uiState as? HomeUiState.Success ?: return@LazyColumn
+            items(success.games, key = { it.id }) { game ->
                 // the row does not store whether it is shortlisted, it asks the state, so there
                 // is no local flag that could drift out of step with the repository
-                val shortlisted = game.id in uiState.shortlistIds
+                val shortlisted = game.id in success.shortlistIds
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -96,7 +97,7 @@ fun HomeScreen(
 fun HomeScreenPreview() {
     StClairTheme {
         HomeScreen(
-            uiState = HomeUiState(games = SampleGames, shortlistIds = setOf(SampleGames.first().id)),
+            uiState = HomeUiState.Success(games = SampleGames, shortlistIds = setOf(SampleGames.first().id)),
             onGameClick = {},
             onToggleShortlist = {},
             onOpenShortlist = {},
@@ -110,7 +111,7 @@ fun HomeScreenPreview() {
 fun HomeScreenEmptyPreview() {
     StClairTheme {
         HomeScreen(
-            uiState = HomeUiState(),
+            uiState = HomeUiState.Empty,
             onGameClick = {},
             onToggleShortlist = {},
             onOpenShortlist = {},

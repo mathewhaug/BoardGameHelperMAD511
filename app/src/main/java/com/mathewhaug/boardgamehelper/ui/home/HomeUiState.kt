@@ -1,14 +1,29 @@
 package com.mathewhaug.boardgamehelper.ui.home
 
+import com.mathewhaug.boardgamehelper.data.AppError
 import com.mathewhaug.boardgamehelper.data.Game
 
-// one immutable object that describes everything the Home screen needs to draw itself. the
-// screen reads it and never writes it, and because it is a data class with defaults a preview can
-// build one with a literal and a test can compare two of them with ==
-//
-// shortlistIds is a Set<Int> rather than the List<Game> the repository hands out, because the only
-// question the screen ever asks is "is this row shortlisted", and a set answers that in one look
-data class HomeUiState(
-    val games: List<Game> = emptyList(),
-    val shortlistIds: Set<Int> = emptySet(),
-)
+// Home is now in exactly one of four situations, and the ViewModel picks one with a simple rule:
+// cached data wins. if there are games, it is Success, even while a refresh runs or after one
+// failed, because a list the user can read beats a spinner or an error page every time
+sealed interface HomeUiState {
+    // nothing cached yet and a refresh is on its way
+    data object Loading : HomeUiState
+
+    // the refresh worked and still came back with nothing
+    data object Empty : HomeUiState
+
+    // nothing cached and the refresh failed, so there is nothing to show but the reason
+    data class Error(val error: AppError) : HomeUiState
+
+    // shortlistIds is a Set<Int> rather than a List<Game>, because the only question the screen
+    // asks is "is this row shortlisted", and a set answers that in one look. refreshing drives the
+    // pull to refresh spinner, and notice is a failed refresh worth a snackbar but not a whole
+    // error screen, because the cached list is still perfectly good
+    data class Success(
+        val games: List<Game>,
+        val shortlistIds: Set<Int> = emptySet(),
+        val refreshing: Boolean = false,
+        val notice: AppError? = null,
+    ) : HomeUiState
+}
