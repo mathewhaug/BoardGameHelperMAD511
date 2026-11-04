@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- hand written sample, not a real BGG response. it copies the shape of the xmlapi2 search
+     response so the app has something to load while the BGG token is pending. the ids, names
+     and years are the real ones, it is what a search for "pandemic" might give back -->
+<items total="3" termsofuse="https://boardgamegeek.com/xmlapi/termsofuse">
+	<item type="boardgame" id="30549">
+		<name type="primary" value="Pandemic"/>
+		<yearpublished value="2008"/>
+	</item>
+	<item type="boardgame" id="161936">
+		<name type="primary" value="Pandemic Legacy: Season 1"/>
+		<yearpublished value="2015"/>
+	</item>
+	<item type="boardgame" id="221107">
+		<name type="primary" value="Pandemic Legacy: Season 2"/>
+		<yearpublished value="2017"/>
+	</item>
+</items>

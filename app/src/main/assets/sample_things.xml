@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- hand written sample, not a real BGG response. it copies the shape of the xmlapi2 thing
+     response so the app has something to load while the BGG token is pending. ids, names,
+     years, player counts and play times are the real ones, the thumbnail urls point at
+     example.com on purpose, so they never load and the error image shows instead -->
+<items termsofuse="https://boardgamegeek.com/xmlapi/termsofuse">
+	<item type="boardgame" id="224517">
+		<thumbnail>https://example.com/bgg-sample/224517_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/224517.jpg</image>
+		<name type="primary" sortindex="1" value="Brass: Birmingham"/>
+		<description>Hand written sample entry for Brass: Birmingham.</description>
+		<yearpublished value="2018"/>
+		<minplayers value="2"/>
+		<maxplayers value="4"/>
+		<playingtime value="120"/>
+		<minplaytime value="120"/>
+		<maxplaytime value="120"/>
+	</item>
+	<item type="boardgame" id="342942">
+		<thumbnail>https://example.com/bgg-sample/342942_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/342942.jpg</image>
+		<name type="primary" sortindex="1" value="Ark Nova"/>
+		<description>Hand written sample entry for Ark Nova.</description>
+		<yearpublished value="2021"/>
+		<minplayers value="1"/>
+		<maxplayers value="4"/>
+		<playingtime value="150"/>
+		<minplaytime value="150"/>
+		<maxplaytime value="150"/>
+	</item>
+	<item type="boardgame" id="174430">
+		<thumbnail>https://example.com/bgg-sample/174430_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/174430.jpg</image>
+		<name type="primary" sortindex="1" value="Gloomhaven"/>
+		<description>Hand written sample entry for Gloomhaven.</description>
+		<yearpublished value="2017"/>
+		<minplayers value="1"/>
+		<maxplayers value="4"/>
+		<playingtime value="120"/>
+		<minplaytime value="120"/>
+		<maxplaytime value="120"/>
+	</item>
+	<item type="boardgame" id="316554">
+		<thumbnail>https://example.com/bgg-sample/316554_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/316554.jpg</image>
+		<name type="primary" sortindex="1" value="Dune: Imperium"/>
+		<description>Hand written sample entry for Dune: Imperium.</description>
+		<yearpublished value="2020"/>
+		<minplayers value="1"/>
+		<maxplayers value="4"/>
+		<playingtime value="120"/>
+		<minplaytime value="120"/>
+		<maxplaytime value="120"/>
+	</item>
+	<item type="boardgame" id="167791">
+		<thumbnail>https://example.com/bgg-sample/167791_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/167791.jpg</image>
+		<name type="primary" sortindex="1" value="Terraforming Mars"/>
+		<description>Hand written sample entry for Terraforming Mars.</description>
+		<yearpublished value="2016"/>
+		<minplayers value="1"/>
+		<maxplayers value="5"/>
+		<playingtime value="120"/>
+		<minplaytime value="120"/>
+		<maxplaytime value="120"/>
+	</item>
+	<item type="boardgame" id="162886">
+		<thumbnail>https://example.com/bgg-sample/162886_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/162886.jpg</image>
+		<name type="primary" sortindex="1" value="Spirit Island"/>
+		<description>Hand written sample entry for Spirit Island.</description>
+		<yearpublished value="2017"/>
+		<minplayers value="1"/>
+		<maxplayers value="4"/>
+		<playingtime value="120"/>
+		<minplaytime value="120"/>
+		<maxplaytime value="120"/>
+	</item>
+	<item type="boardgame" id="266192">
+		<thumbnail>https://example.com/bgg-sample/266192_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/266192.jpg</image>
+		<name type="primary" sortindex="1" value="Wingspan"/>
+		<description>Hand written sample entry for Wingspan.</description>
+		<yearpublished value="2019"/>
+		<minplayers value="1"/>
+		<maxplayers value="5"/>
+		<playingtime value="70"/>
+		<minplaytime value="70"/>
+		<maxplaytime value="70"/>
+	</item>
+	<item type="boardgame" id="169786">
+		<thumbnail>https://example.com/bgg-sample/169786_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/169786.jpg</image>
+		<name type="primary" sortindex="1" value="Scythe"/>
+		<description>Hand written sample entry for Scythe.</description>
+		<yearpublished value="2016"/>
+		<minplayers value="1"/>
+		<maxplayers value="5"/>
+		<playingtime value="115"/>
+		<minplaytime value="115"/>
+		<maxplaytime value="115"/>
+	</item>
+	<item type="boardgame" id="295947">
+		<thumbnail>https://example.com/bgg-sample/295947_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/295947.jpg</image>
+		<name type="primary" sortindex="1" value="Cascadia"/>
+		<description>Hand written sample entry for Cascadia.</description>
+		<yearpublished value="2021"/>
+		<minplayers value="1"/>
+		<maxplayers value="4"/>
+		<playingtime value="45"/>
+		<minplaytime value="45"/>
+		<maxplaytime value="45"/>
+	</item>
+	<item type="boardgame" id="199792">
+		<thumbnail>https://example.com/bgg-sample/199792_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/199792.jpg</image>
+		<name type="primary" sortindex="1" value="Everdell"/>
+		<description>Hand written sample entry for Everdell.</description>
+		<yearpublished value="2018"/>
+		<minplayers value="1"/>
+		<maxplayers value="4"/>
+		<playingtime value="80"/>
+		<minplaytime value="80"/>
+		<maxplaytime value="80"/>
+	</item>
+	<item type="boardgame" id="230802">
+		<thumbnail>https://example.com/bgg-sample/230802_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/230802.jpg</image>
+		<name type="primary" sortindex="1" value="Azul"/>
+		<description>Hand written sample entry for Azul.</description>
+		<yearpublished value="2017"/>
+		<minplayers value="2"/>
+		<maxplayers value="4"/>
+		<playingtime value="45"/>
+		<minplaytime value="45"/>
+		<maxplaytime value="45"/>
+	</item>
+	<item type="boardgame" id="68448">
+		<thumbnail>https://example.com/bgg-sample/68448_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/68448.jpg</image>
+		<name type="primary" sortindex="1" value="7 Wonders"/>
+		<description>Hand written sample entry for 7 Wonders.</description>
+		<yearpublished value="2010"/>
+		<minplayers value="2"/>
+		<maxplayers value="7"/>
+		<playingtime value="30"/>
+		<minplaytime value="30"/>
+		<maxplaytime value="30"/>
+	</item>
+	<item type="boardgame" id="178900">
+		<thumbnail>https://example.com/bgg-sample/178900_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/178900.jpg</image>
+		<name type="primary" sortindex="1" value="Codenames"/>
+		<description>Hand written sample entry for Codenames.</description>
+		<yearpublished value="2015"/>
+		<minplayers value="2"/>
+		<maxplayers value="8"/>
+		<playingtime value="15"/>
+		<minplaytime value="15"/>
+		<maxplaytime value="15"/>
+	</item>
+	<item type="boardgame" id="148228">
+		<thumbnail>https://example.com/bgg-sample/148228_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/148228.jpg</image>
+		<name type="primary" sortindex="1" value="Splendor"/>
+		<description>Hand written sample entry for Splendor.</description>
+		<yearpublished value="2014"/>
+		<minplayers value="2"/>
+		<maxplayers value="4"/>
+		<playingtime value="30"/>
+		<minplaytime value="30"/>
+		<maxplaytime value="30"/>
+	</item>
+	<item type="boardgame" id="9209">
+		<thumbnail>https://example.com/bgg-sample/9209_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/9209.jpg</image>
+		<name type="primary" sortindex="1" value="Ticket to Ride"/>
+		<description>Hand written sample entry for Ticket to Ride.</description>
+		<yearpublished value="2004"/>
+		<minplayers value="2"/>
+		<maxplayers value="5"/>
+		<playingtime value="60"/>
+		<minplaytime value="60"/>
+		<maxplaytime value="60"/>
+	</item>
+	<item type="boardgame" id="30549">
+		<thumbnail>https://example.com/bgg-sample/30549_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/30549.jpg</image>
+		<name type="primary" sortindex="1" value="Pandemic"/>
+		<description>Hand written sample entry for Pandemic.</description>
+		<yearpublished value="2008"/>
+		<minplayers value="2"/>
+		<maxplayers value="4"/>
+		<playingtime value="45"/>
+		<minplaytime value="45"/>
+		<maxplaytime value="45"/>
+	</item>
+	<item type="boardgame" id="13">
+		<thumbnail>https://example.com/bgg-sample/13_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/13.jpg</image>
+		<name type="primary" sortindex="1" value="Catan"/>
+		<description>Hand written sample entry for Catan.</description>
+		<yearpublished value="1995"/>
+		<minplayers value="3"/>
+		<maxplayers value="4"/>
+		<playingtime value="120"/>
+		<minplaytime value="120"/>
+		<maxplaytime value="120"/>
+	</item>
+	<item type="boardgame" id="822">
+		<thumbnail>https://example.com/bgg-sample/822_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/822.jpg</image>
+		<name type="primary" sortindex="1" value="Carcassonne"/>
+		<description>Hand written sample entry for Carcassonne.</description>
+		<yearpublished value="2000"/>
+		<minplayers value="2"/>
+		<maxplayers value="5"/>
+		<playingtime value="45"/>
+		<minplaytime value="45"/>
+		<maxplaytime value="45"/>
+	</item>
+	<item type="boardgame" id="36218">
+		<thumbnail>https://example.com/bgg-sample/36218_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/36218.jpg</image>
+		<name type="primary" sortindex="1" value="Dominion"/>
+		<description>Hand written sample entry for Dominion.</description>
+		<yearpublished value="2008"/>
+		<minplayers value="2"/>
+		<maxplayers value="4"/>
+		<playingtime value="30"/>
+		<minplaytime value="30"/>
+		<maxplaytime value="30"/>
+	</item>
+	<item type="boardgame" id="12333">
+		<thumbnail>https://example.com/bgg-sample/12333_thumb.jpg</thumbnail>
+		<image>https://example.com/bgg-sample/12333.jpg</image>
+		<name type="primary" sortindex="1" value="Twilight Struggle"/>
+		<description>Hand written sample entry for Twilight Struggle.</description>
+		<yearpublished value="2005"/>
+		<minplayers value="2"/>
+		<maxplayers value="2"/>
+		<playingtime value="180"/>
+		<minplaytime value="180"/>
+		<maxplaytime value="180"/>
+	</item>
+</items>

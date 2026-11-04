@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- hand written sample, not a real BGG response. it copies the shape of the xmlapi2 hot
+     response so the app has something to load while the BGG token is pending. ids, names,
+     years, player counts and play times are the real ones, the thumbnail urls point at
+     example.com on purpose, so they never load and the error image shows instead -->
+<items termsofuse="https://boardgamegeek.com/xmlapi/termsofuse">
+	<item id="224517" rank="1">
+		<thumbnail value="https://example.com/bgg-sample/224517_thumb.jpg"/>
+		<name value="Brass: Birmingham"/>
+		<yearpublished value="2018"/>
+	</item>
+	<item id="342942" rank="2">
+		<thumbnail value="https://example.com/bgg-sample/342942_thumb.jpg"/>
+		<name value="Ark Nova"/>
+		<yearpublished value="2021"/>
+	</item>
+	<item id="174430" rank="3">
+		<thumbnail value="https://example.com/bgg-sample/174430_thumb.jpg"/>
+		<name value="Gloomhaven"/>
+		<yearpublished value="2017"/>
+	</item>
+	<item id="316554" rank="4">
+		<thumbnail value="https://example.com/bgg-sample/316554_thumb.jpg"/>
+		<name value="Dune: Imperium"/>
+		<yearpublished value="2020"/>
+	</item>
+	<item id="167791" rank="5">
+		<thumbnail value="https://example.com/bgg-sample/167791_thumb.jpg"/>
+		<name value="Terraforming Mars"/>
+		<yearpublished value="2016"/>
+	</item>
+	<item id="162886" rank="6">
+		<thumbnail value="https://example.com/bgg-sample/162886_thumb.jpg"/>
+		<name value="Spirit Island"/>
+		<yearpublished value="2017"/>
+	</item>
+	<item id="266192" rank="7">
+		<thumbnail value="https://example.com/bgg-sample/266192_thumb.jpg"/>
+		<name value="Wingspan"/>
+		<yearpublished value="2019"/>
+	</item>
+	<item id="169786" rank="8">
+		<thumbnail value="https://example.com/bgg-sample/169786_thumb.jpg"/>
+		<name value="Scythe"/>
+		<yearpublished value="2016"/>
+	</item>
+	<item id="295947" rank="9">
+		<thumbnail value="https://example.com/bgg-sample/295947_thumb.jpg"/>
+		<name value="Cascadia"/>
+		<yearpublished value="2021"/>
+	</item>
+	<item id="199792" rank="10">
+		<thumbnail value="https://example.com/bgg-sample/199792_thumb.jpg"/>
+		<name value="Everdell"/>
+		<yearpublished value="2018"/>
+	</item>
+	<item id="230802" rank="11">
+		<thumbnail value="https://example.com/bgg-sample/230802_thumb.jpg"/>
+		<name value="Azul"/>
+		<yearpublished value="2017"/>
+	</item>
+	<item id="68448" rank="12">
+		<thumbnail value="https://example.com/bgg-sample/68448_thumb.jpg"/>
+		<name value="7 Wonders"/>
+		<yearpublished value="2010"/>
+	</item>
+	<item id="178900" rank="13">
+		<thumbnail value="https://example.com/bgg-sample/178900_thumb.jpg"/>
+		<name value="Codenames"/>
+		<yearpublished value="2015"/>
+	</item>
+	<item id="148228" rank="14">
+		<thumbnail value="https://example.com/bgg-sample/148228_thumb.jpg"/>
+		<name value="Splendor"/>
+		<yearpublished value="2014"/>
+	</item>
+	<item id="9209" rank="15">
+		<thumbnail value="https://example.com/bgg-sample/9209_thumb.jpg"/>
+		<name value="Ticket to Ride"/>
+		<yearpublished value="2004"/>
+	</item>
+	<item id="30549" rank="16">
+		<thumbnail value="https://example.com/bgg-sample/30549_thumb.jpg"/>
+		<name value="Pandemic"/>
+		<yearpublished value="2008"/>
+	</item>
+	<item id="13" rank="17">
+		<thumbnail value="https://example.com/bgg-sample/13_thumb.jpg"/>
+		<name value="Catan"/>
+		<yearpublished value="1995"/>
+	</item>
+	<item id="822" rank="18">
+		<thumbnail value="https://example.com/bgg-sample/822_thumb.jpg"/>
+		<name value="Carcassonne"/>
+		<yearpublished value="2000"/>
+	</item>
+	<item id="36218" rank="19">
+		<thumbnail value="https://example.com/bgg-sample/36218_thumb.jpg"/>
+		<name value="Dominion"/>
+		<yearpublished value="2008"/>
+	</item>
+	<item id="12333" rank="20">
+		<thumbnail value="https://example.com/bgg-sample/12333_thumb.jpg"/>
+		<name value="Twilight Struggle"/>
+		<yearpublished value="2005"/>
+	</item>
+</items>

@@ -1,17 +1,22 @@
 package com.mathewhaug.boardgamehelper.di
 
+import android.content.Context
+import android.util.Log
 import com.mathewhaug.boardgamehelper.BuildConfig
 import com.mathewhaug.boardgamehelper.data.remote.AuthInterceptor
 import com.mathewhaug.boardgamehelper.data.remote.BggApi
+import com.mathewhaug.boardgamehelper.data.remote.SampleBggApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.create
 import java.util.concurrent.TimeUnit
+import javax.inject.Provider
 import javax.inject.Singleton
 
 // one OkHttpClient for the whole app, because each one owns a connection pool and a thread pool,
@@ -31,9 +36,26 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit = retrofit(BASE_URL, client)
 
+    // a blank token means nobody has put one in local.properties yet, and BGG would turn every
+    // request down with a 401, so the app runs on the sample files instead. Provider<Retrofit>
+    // means the real client is only ever built when it is actually going to be used. the log line
+    // says which one won, so nobody has to guess why the list looks the way it does. it names the
+    // source and never prints the token
     @Provides
     @Singleton
-    fun provideBggApi(retrofit: Retrofit): BggApi = retrofit.create()
+    fun provideBggApi(
+        @ApplicationContext context: Context,
+        retrofit: Provider<Retrofit>,
+    ): BggApi =
+        if (BuildConfig.BGG_TOKEN.isBlank()) {
+            Log.i(TAG, "BGG_TOKEN is blank, using SampleBggApi (sample data from assets)")
+            SampleBggApi(context.assets)
+        } else {
+            Log.i(TAG, "BGG_TOKEN is set, using the real BGG api at $BASE_URL")
+            retrofit.get().create()
+        }
+
+    private const val TAG = "NetworkModule"
 
     // the providers above only pick the real token and the real host. the building lives in these
     // two so the MockWebServer test can run exactly the same setup against a local server
