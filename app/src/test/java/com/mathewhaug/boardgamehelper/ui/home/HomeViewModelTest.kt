@@ -4,6 +4,8 @@ import com.mathewhaug.boardgamehelper.data.AppError
 import com.mathewhaug.boardgamehelper.data.AppException
 import com.mathewhaug.boardgamehelper.data.FakeGameRepository
 import com.mathewhaug.boardgamehelper.data.SampleGames
+import com.mathewhaug.boardgamehelper.timer.GameTimerController
+import com.mathewhaug.boardgamehelper.timer.TimerState
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -12,10 +14,12 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -36,10 +40,25 @@ class HomeViewModelTest {
     private val twoHoursAgo get() = now - 2 * 60 * 60 * 1000L
     private val noNetwork = Result.failure<Unit>(AppException(AppError.NoNetwork))
 
+    // stands in for the real controller, which would need a Context to reach the service. it
+    // plays the service's part by writing TimerState, and counts calls so a test can check them
+    private class FakeTimerController(private val state: TimerState) : GameTimerController {
+        var starts = 0
+        var stops = 0
+        override fun start() { starts++; state.start() }
+        override fun stop() { stops++; state.stop() }
+    }
+
+    private val timerState = TimerState()
+    private val timerController = FakeTimerController(timerState)
+
+    private fun viewModel(repository: FakeGameRepository) =
+        HomeViewModel(repository, timerState, timerController)
+
     // uiState only runs while someone collects it (WhileSubscribed), so each test keeps a
     // collector going in backgroundScope, which runTest cancels on its own at the end
     private fun TestScope.started(repository: FakeGameRepository): HomeViewModel {
-        val viewModel = HomeViewModel(repository)
+        val viewModel = viewModel(repository)
         backgroundScope.launch { viewModel.uiState.collect {} }
         advanceUntilIdle()
         return viewModel
@@ -47,7 +66,7 @@ class HomeViewModelTest {
 
     @Test
     fun toggleShortlist_addsThenRemoves() = runTest {
-        val viewModel = HomeViewModel(FakeGameRepository(lastFetch = now))
+        val viewModel = viewModel(FakeGameRepository(lastFetch = now))
         val catan = SampleGames.first()
 
         // first { } collects until the predicate is true, which is the natural way to wait on a
@@ -143,5 +162,55 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         assertEquals(2, repository.refreshCount)
+    }
+
+    // the ticker never goes idle while a timer runs, so these tests step with runCurrent and
+    // advanceTimeBy instead of advanceUntilIdle, which would wait forever
+    @Test
+    fun noTimer_hasNoElapsedTime() = runTest {
+        val viewModel = viewModel(FakeGameRepository(lastFetch = now))
+        backgroundScope.launch { viewModel.gameNight.collect {} }
+        runCurrent()
+
+        assertNull(viewModel.gameNight.value.elapsedSeconds)
+    }
+
+    @Test
+    fun runningTimer_showsElapsedSeconds_untilStopped() = runTest {
+        val viewModel = viewModel(FakeGameRepository(lastFetch = now))
+        backgroundScope.launch { viewModel.gameNight.collect {} }
+        timerState.start(now = now - 65_000)
+        runCurrent()
+
+        val elapsed = viewModel.gameNight.value.elapsedSeconds
+        assertTrue("elapsed was $elapsed", elapsed != null && elapsed in 65L..66L)
+
+        viewModel.stopTimer()
+        runCurrent()
+        assertNull(viewModel.gameNight.value.elapsedSeconds)
+        assertEquals(1, timerController.stops)
+    }
+
+    @Test
+    fun startTimer_goesThroughTheController() = runTest {
+        val viewModel = viewModel(FakeGameRepository(lastFetch = now))
+
+        viewModel.startTimer()
+
+        assertEquals(1, timerController.starts)
+    }
+
+    @Test
+    fun setLowBattery_showsAndClearsTheFlag() = runTest {
+        val viewModel = viewModel(FakeGameRepository(lastFetch = now))
+        backgroundScope.launch { viewModel.gameNight.collect {} }
+
+        viewModel.setLowBattery(true)
+        runCurrent()
+        assertTrue(viewModel.gameNight.value.lowBattery)
+
+        viewModel.setLowBattery(false)
+        runCurrent()
+        assertTrue(!viewModel.gameNight.value.lowBattery)
     }
 }

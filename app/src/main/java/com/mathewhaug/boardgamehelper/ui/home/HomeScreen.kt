@@ -1,9 +1,11 @@
 package com.mathewhaug.boardgamehelper.ui.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -22,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -63,6 +66,12 @@ fun HomeScreen(
     onSignOut: () -> Unit,
     onRefresh: () -> Unit,
     onNoticeShown: () -> Unit,
+    gameNight: GameNightUiState,
+    notificationHidden: Boolean,
+    showOpenSettings: Boolean,
+    onStartTimer: () -> Unit,
+    onStopTimer: () -> Unit,
+    onOpenSettings: () -> Unit,
 ) {
     // which snackbar is on screen is pure UI state, so it is fine for it to live here
     val snackbarHostState = remember { SnackbarHostState() }
@@ -95,36 +104,95 @@ fun HomeScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = { BggCredit() },
     ) { innerPadding ->
-        val modifier = Modifier.fillMaxSize().padding(innerPadding)
-        // an exhaustive when over the sealed interface: add a fifth state to HomeUiState and this
-        // stops compiling until it is drawn
-        when (uiState) {
-            HomeUiState.Loading -> Box(modifier, contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-            HomeUiState.Empty -> Box(modifier, contentAlignment = Alignment.Center) {
-                Text("No games to show yet")
-            }
-            is HomeUiState.Error -> Column(
-                modifier = modifier.padding(24.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(stringResource(uiState.error.userMessage()), textAlign = TextAlign.Center)
-                Button(onClick = onRefresh) {
-                    Text("Retry")
+        // the game night row sits above the list and stays put whichever of the four states the
+        // list is in, the list takes whatever height is left
+        Column(Modifier.fillMaxSize().padding(innerPadding)) {
+            if (gameNight.lowBattery) LowBatteryBanner()
+            GameNightRow(gameNight, notificationHidden, showOpenSettings, onStartTimer, onStopTimer, onOpenSettings)
+            val modifier = Modifier.fillMaxWidth().weight(1f)
+            // an exhaustive when over the sealed interface: add a fifth state to HomeUiState and this
+            // stops compiling until it is drawn
+            when (uiState) {
+                HomeUiState.Loading -> Box(modifier, contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
                 }
-            }
-            is HomeUiState.Success -> PullToRefreshBox(
-                isRefreshing = uiState.refreshing,
-                onRefresh = onRefresh,
-                modifier = modifier,
-            ) {
-                GameList(uiState, onGameClick, onToggleShortlist)
+                HomeUiState.Empty -> Box(modifier, contentAlignment = Alignment.Center) {
+                    Text("No games to show yet")
+                }
+                is HomeUiState.Error -> Column(
+                    modifier = modifier.padding(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(stringResource(uiState.error.userMessage()), textAlign = TextAlign.Center)
+                    Button(onClick = onRefresh) {
+                        Text("Retry")
+                    }
+                }
+                is HomeUiState.Success -> PullToRefreshBox(
+                    isRefreshing = uiState.refreshing,
+                    onRefresh = onRefresh,
+                    modifier = modifier,
+                ) {
+                    GameList(uiState, onGameClick, onToggleShortlist)
+                }
             }
         }
     }
 }
+
+@Composable
+private fun GameNightRow(
+    gameNight: GameNightUiState,
+    notificationHidden: Boolean,
+    showOpenSettings: Boolean,
+    onStartTimer: () -> Unit,
+    onStopTimer: () -> Unit,
+    onOpenSettings: () -> Unit,
+) {
+    val elapsed = gameNight.elapsedSeconds
+    Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text("Game night", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+            if (elapsed != null) {
+                Text(
+                    formatElapsed(elapsed),
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(end = 12.dp),
+                )
+                OutlinedButton(onClick = onStopTimer) { Text("Stop timer") }
+            } else {
+                Button(onClick = onStartTimer) { Text("Start timer") }
+            }
+        }
+        if (notificationHidden) {
+            Text(
+                "Timer is running, but its notification is hidden",
+                style = MaterialTheme.typography.bodySmall,
+            )
+        }
+        if (showOpenSettings) {
+            TextButton(onClick = onOpenSettings) { Text("Allow notifications in Settings") }
+        }
+    }
+}
+
+@Composable
+private fun LowBatteryBanner() {
+    Text(
+        text = "Low battery, background refresh will wait",
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onErrorContainer,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.errorContainer)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+    )
+}
+
+// minutes keep counting past 59 rather than rolling into hours, a long game reads as 125:30
+private fun formatElapsed(seconds: Long): String =
+    "%02d:%02d".format(seconds / 60, seconds % 60)
 
 @Composable
 private fun GameList(
@@ -199,7 +267,11 @@ private fun BggCredit() {
 
 // one preview per state, built from a UiState literal: no ViewModel, no repository, no network
 @Composable
-private fun HomeScreenPreview(uiState: HomeUiState) {
+private fun HomeScreenPreview(
+    uiState: HomeUiState,
+    gameNight: GameNightUiState = GameNightUiState(),
+    notificationHidden: Boolean = false,
+) {
     StClairTheme {
         HomeScreen(
             uiState = uiState,
@@ -209,6 +281,12 @@ private fun HomeScreenPreview(uiState: HomeUiState) {
             onSignOut = {},
             onRefresh = {},
             onNoticeShown = {},
+            gameNight = gameNight,
+            notificationHidden = notificationHidden,
+            showOpenSettings = false,
+            onStartTimer = {},
+            onStopTimer = {},
+            onOpenSettings = {},
         )
     }
 }
@@ -229,4 +307,12 @@ fun HomeScreenErrorPreview() = HomeScreenPreview(HomeUiState.Error(AppError.NoNe
 @Composable
 fun HomeScreenSuccessPreview() = HomeScreenPreview(
     HomeUiState.Success(games = SampleGames, shortlistIds = setOf(SampleGames.first().id))
+)
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenTimerRunningPreview() = HomeScreenPreview(
+    HomeUiState.Success(games = SampleGames),
+    gameNight = GameNightUiState(elapsedSeconds = 754, lowBattery = true),
+    notificationHidden = true,
 )

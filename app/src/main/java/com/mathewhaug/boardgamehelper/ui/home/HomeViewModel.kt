@@ -6,11 +6,19 @@ import com.mathewhaug.boardgamehelper.data.AppError
 import com.mathewhaug.boardgamehelper.data.AppException
 import com.mathewhaug.boardgamehelper.data.Game
 import com.mathewhaug.boardgamehelper.data.GameRepository
+import com.mathewhaug.boardgamehelper.timer.GameTimerController
+import com.mathewhaug.boardgamehelper.timer.TimerState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -20,7 +28,11 @@ import javax.inject.Inject
 // FakeGameRepository. this class has no idea which implementation it was handed, which is exactly
 // what lets the unit test pass it a fake and the app pass it whatever hilt has bound
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val repository: GameRepository) : ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val repository: GameRepository,
+    timerState: TimerState,
+    private val timerController: GameTimerController,
+) : ViewModel() {
 
     // the one thing the repository cannot tell us: whether a refresh is running right now and how
     // the last one went. private and only written in here, the screen sees it through uiState.
@@ -100,6 +112,43 @@ class HomeViewModel @Inject constructor(private val repository: GameRepository) 
             repository.addToShortlist(game)
         }
     }
+
+    // the ticker only exists while a start time does. flatMapLatest throws the old ticker away the
+    // moment startedAt changes, so stopping the timer stops the ticking too, and with no timer
+    // running there is no coroutine waking up once a second for nothing
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val elapsedSeconds: Flow<Long?> = timerState.startedAt.flatMapLatest { startedAt ->
+        if (startedAt == null) {
+            flowOf(null)
+        } else {
+            flow {
+                while (true) {
+                    emit((System.currentTimeMillis() - startedAt) / 1000)
+                    delay(1_000)
+                }
+            }
+        }
+    }
+
+    // written only by setLowBattery, which the Route calls from its BatteryReceiver
+    private val lowBattery = MutableStateFlow(false)
+
+    // its own StateFlow rather than part of the combine above, so a tick every second does not
+    // rebuild the game list state, and WhileSubscribed stops the ticker with the screen
+    val gameNight: StateFlow<GameNightUiState> =
+        combine(elapsedSeconds, lowBattery) { elapsed, low ->
+            GameNightUiState(elapsedSeconds = elapsed, lowBattery = low)
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), GameNightUiState())
+
+    fun setLowBattery(low: Boolean) {
+        lowBattery.value = low
+    }
+
+    // the ViewModel only asks the service to start or stop. it never writes TimerState itself,
+    // the service does, so the notification's Stop button and this one cannot disagree
+    fun startTimer() = timerController.start()
+
+    fun stopTimer() = timerController.stop()
 
     private companion object {
         const val STALE_AFTER_MS = 60 * 60 * 1000L

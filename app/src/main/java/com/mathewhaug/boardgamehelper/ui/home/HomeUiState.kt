@@ -27,3 +27,12 @@ sealed interface HomeUiState {
         val notice: AppError? = null,
     ) : HomeUiState
 }
+
+// the game night row lives beside the game list rather than inside one of the four states above,
+// because the timer keeps running whether the list is loading, empty, failed or showing games.
+// elapsedSeconds is null when no timer is running. lowBattery rides along here for the same
+// reason, it is about the phone, not about which state the list is in
+data class GameNightUiState(
+    val elapsedSeconds: Long? = null,
+    val lowBattery: Boolean = false,
+)

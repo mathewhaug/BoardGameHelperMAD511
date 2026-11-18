@@ -6,6 +6,14 @@
          with a SecurityException before it ever leaves the phone -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- any foreground service needs the general one, and from API 34 also the one that matches
+         its type. both are normal permissions, so there is no prompt for them -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <!-- a runtime permission from API 33, so the user can say no. the timer has to keep working
+         either way, only its notification goes missing -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <!-- android:name is what makes the system build our BoardGameApp instead of the stock
          Application, which is the only reason the hilt graph ever gets created -->
     <application
@@ -30,6 +38,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- a game night timer fits none of the named types, so it is specialUse, and the
+             subtype property is the short reason Play reviewers read. not exported because only
+             this app should ever start or stop it -->
+        <service
+            android:name=".timer.GameTimerService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="game_timer" />
+        </service>
     </application>
 
 </manifest>
